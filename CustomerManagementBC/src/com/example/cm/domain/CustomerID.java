@@ -10,10 +10,10 @@ import com.example.ddd.helper.ValueObject;
 @ValueObject
 @Identity(entity = Customer.class)
 public final class CustomerID {
-	private final String id;
+	private final String value;
 	
-	private CustomerID(String id) {
-		this.id = id;
+	private CustomerID(String value) {
+		this.value = value;
 	}
 	
 	// factory method -> guarantees to return valid object
@@ -33,13 +33,13 @@ public final class CustomerID {
 	}
 
 	// String: immutable
-	public String getId() {
-		return id;
+	public String getValue() {
+		return value;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(value);
 	}
 
 	@Override
@@ -51,12 +51,12 @@ public final class CustomerID {
 		if (getClass() != obj.getClass())
 			return false;
 		CustomerID other = (CustomerID) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(value, other.value);
 	}
 
 	@Override
 	public String toString() {
-		return "CustomerID [id=" + id + "]";
+		return "CustomerID [id=" + value + "]";
 	}
 
 }

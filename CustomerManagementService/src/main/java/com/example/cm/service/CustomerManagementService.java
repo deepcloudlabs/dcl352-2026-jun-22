@@ -32,7 +32,7 @@ public class CustomerManagementService {
 	public RegisterCustomerResponse register(RegisterCustomerRequest registerCustomerRequest) {
 		var customerId = CustomerID.of(registerCustomerRequest.customerId());
 		var customer = new Customer.Builder()
-				                   .customerId(customerId)
+				                   .customerId(customerId.getValue())
 				                   .fullName(registerCustomerRequest.firstName(), registerCustomerRequest.lastName())
 				                   .build();
 		customerManagementApplication.registerCustomer(customer);

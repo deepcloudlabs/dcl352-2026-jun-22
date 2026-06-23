@@ -5,7 +5,7 @@ import com.example.cm.domain.Customer;
 public class CustomerRegisteredEvent extends CustomerManagementEvent {
 
 	public CustomerRegisteredEvent(Customer customer) {
-		super(customer.getId());
+		super(customer.getIdentity());
 	}
 
 }

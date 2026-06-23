@@ -1,18 +1,18 @@
 package com.example.cm.domain;
 
 public abstract class DomainEntity<T> {
-	protected T id;
+	protected T identity;
 
-	public DomainEntity(T id) {
-		this.id = id;
+	public DomainEntity(T identity) {
+		this.identity = identity;
 	}
 
-	public T getId() {
-		return id;
+	public T getIdentity() {
+		return identity;
 	}
 
-	public void setId(T id) {
-		this.id = id;
+	public void setIdentity(T identity) {
+		this.identity = identity;
 	}
 	
 }

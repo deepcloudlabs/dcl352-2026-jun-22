@@ -22,7 +22,7 @@ public class CustomerContact extends DomainEntity<ContactID> {
 		this.email = email;
 	}
 
-	public AddressList getAddresses() {
+	public AddressList getAddressList() {
 		return addresses;
 	}
 

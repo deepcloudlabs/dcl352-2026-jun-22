@@ -63,12 +63,8 @@ public class Customer extends DomainEntity<CustomerID> {
 		return new Builder();
 	}
 
-	public static Builder builder(CustomerID customerId) {
-		return new Builder().customerId(customerId);
-	}
-
 	public CustomerID customerId() {
-		return id;
+		return this.customerId();
 	}
 
 	public FullName fullName() {
@@ -146,7 +142,7 @@ public class Customer extends DomainEntity<CustomerID> {
 	}
 
 	private void enforceInvariants() {
-		if (id == null) {
+		if (this.customerId() == null) {
 			throw new DomainInvariantViolation(30, "Customer identity is required.");
 		}
 
@@ -179,8 +175,9 @@ public class Customer extends DomainEntity<CustomerID> {
 		private CustomerProfile customerProfile;
 		private CustomerContact customerContact;
 
-		public Builder customerId(CustomerID customerId) {
-			this.customerId = Objects.requireNonNull(customerId, "customerId cannot be null");
+		public Builder customerId(String customerId) {
+			Objects.requireNonNull(customerId, "customerId cannot be null");
+			this.customerId = CustomerID.of(customerId);
 			return this;
 		}
 
