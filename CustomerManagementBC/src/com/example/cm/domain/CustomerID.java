@@ -3,10 +3,12 @@ package com.example.cm.domain;
 import java.util.Objects;
 
 import com.example.cm.domain.exception.ValidationRule;
+import com.example.ddd.helper.Identity;
 import com.example.ddd.helper.ValueObject;
 
 // Immutable, Identity -> value
 @ValueObject
+@Identity(entity = Customer.class)
 public final class CustomerID {
 	private final String id;
 	
