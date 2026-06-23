@@ -1,4 +1,4 @@
-package com.example.hexagonal;
+package com.example.hexagonal.helper;
 
 public enum PortType {
 	DRIVING_PORT("API"), DRIVEN_PORT("SPI");

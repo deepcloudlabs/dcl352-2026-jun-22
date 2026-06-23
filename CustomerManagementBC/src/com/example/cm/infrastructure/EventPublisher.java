@@ -1,7 +1,7 @@
 package com.example.cm.infrastructure;
 
-import com.example.hexagonal.Port;
-import com.example.hexagonal.PortType;
+import com.example.hexagonal.helper.Port;
+import com.example.hexagonal.helper.PortType;
 
 @Port(PortType.DRIVEN_PORT)
 public interface EventPublisher<E> {

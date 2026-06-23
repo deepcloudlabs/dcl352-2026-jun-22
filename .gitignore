@@ -26,3 +26,7 @@ replay_pid*
 /CustomerManagementBC/target
 /CustomerManagementBC/.settings
 /CustomerManagementService/.mvn
+/helper-utils/.settings
+/helper-utils/target
+/shared-kernel/.settings
+/shared-kernel/target

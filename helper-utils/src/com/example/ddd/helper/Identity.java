@@ -12,6 +12,6 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 public @interface Identity {
 
-	Class<?> entity();
+	Class<?> entity() default Identity.class;
 
 }

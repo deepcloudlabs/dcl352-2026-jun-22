@@ -3,19 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.example</groupId>
-	<artifactId>customer-management-bc</artifactId>
+	<artifactId>shared-kernel</artifactId>
 	<version>0.0.1</version>
-	<name>Customer Management BC</name>
-	<description>Customer Management BC</description>
+	<name>Shared Kernel</name>
+	<description>Shared Kernel</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.example</groupId>
 			<artifactId>helper-utils</artifactId>
-			<version>0.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.example</groupId>
-			<artifactId>shared-kernel</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
@@ -26,7 +21,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.13.0</version>
 				<configuration>
-					<release>25</release>
+					<release>26</release>
 				</configuration>
 			</plugin>
 		</plugins>

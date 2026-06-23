@@ -179,9 +179,6 @@ public class Customer extends DomainEntity<CustomerID> {
 		private CustomerProfile customerProfile;
 		private CustomerContact customerContact;
 
-		private Builder() {
-		}
-
 		public Builder customerId(CustomerID customerId) {
 			this.customerId = Objects.requireNonNull(customerId, "customerId cannot be null");
 			return this;

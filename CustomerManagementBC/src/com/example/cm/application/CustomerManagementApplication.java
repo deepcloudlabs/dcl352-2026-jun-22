@@ -7,8 +7,8 @@ import com.example.cm.domain.CustomerID;
 import com.example.cm.domain.Email;
 import com.example.cm.domain.Phone;
 import com.example.ddd.helper.OpenHostService;
-import com.example.hexagonal.Port;
-import com.example.hexagonal.PortType;
+import com.example.hexagonal.helper.Port;
+import com.example.hexagonal.helper.PortType;
 
 @OpenHostService
 @Port(PortType.DRIVING_PORT)
