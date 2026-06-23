@@ -27,27 +27,32 @@ import com.example.hexagonal.helper.Adapter;
 @CrossOrigin
 @Validated
 @RequestMapping("/customers")
-@Adapter(port=CustomerManagementApplication.class)
+@Adapter(port = CustomerManagementApplication.class)
 public class CustomerManagementRestController {
-	private 	CustomerManagementService customerManagementService;
-	
+	private final CustomerManagementService customerManagementService;
+
+	public CustomerManagementRestController(CustomerManagementService customerManagementService) {
+		this.customerManagementService = customerManagementService;
+	}
+
 	@PostMapping
-	public RegisterCustomerResponse registerCustomer(RegisterCustomerRequest registerCustomerRequest) {
+	public RegisterCustomerResponse registerCustomer(@RequestBody RegisterCustomerRequest registerCustomerRequest) {
 		return customerManagementService.register(registerCustomerRequest);
 	}
-	
+
 	@GetMapping("{customerId}")
-	public CustomerResponse findCustomerById(@PathVariable String customerId){
-		return customerManagementService.findCustomerById(customerId);		
+	public CustomerResponse findCustomerById(@PathVariable String customerId) {
+		return customerManagementService.findCustomerById(customerId);
 	}
-	
+
 	@PutMapping("/{customerId}/email")
-	public ChangeEmailResponse changeEmail(@PathVariable String customerId,@RequestBody ChangeEmailRequest changeEmailRequest){
-		return customerManagementService.changeEmail(customerId,changeEmailRequest);		
+	public ChangeEmailResponse changeEmail(@PathVariable String customerId, @RequestBody ChangeEmailRequest changeEmailRequest) {
+		return customerManagementService.changeEmail(customerId, changeEmailRequest);
 	}
-	
+
 	@PutMapping("/{customerId}/phone")
-	public ChangePrimaryPhoneResponse changePrimaryPhone(@PathVariable String customerId,@RequestBody ChangePrimaryPhoneRequest changePrimaryPhoneRequest) {
-		return customerManagementService.changePrimaryPhone(customerId,changePrimaryPhoneRequest);				
+	public ChangePrimaryPhoneResponse changePrimaryPhone(@PathVariable String customerId,
+			@RequestBody ChangePrimaryPhoneRequest changePrimaryPhoneRequest) {
+		return customerManagementService.changePrimaryPhone(customerId, changePrimaryPhoneRequest);
 	}
 }

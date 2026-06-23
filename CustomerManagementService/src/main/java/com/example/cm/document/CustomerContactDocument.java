@@ -1,11 +1,13 @@
 package com.example.cm.document;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.example.cm.domain.Address;
 import com.example.cm.domain.AddressList;
 import com.example.cm.domain.CustomerContact;
+import com.example.cm.domain.Phone;
+import com.example.cm.domain.PhoneList;
 
 public class CustomerContactDocument {
 	private int id;
@@ -18,7 +20,7 @@ public class CustomerContactDocument {
 	public CustomerContactDocument() {
 	}
 
-	public CustomerContactDocument(int id, String email, int addressListId, 
+	public CustomerContactDocument(int id, String email, int addressListId,
 			List<AddressDocument> addresses, int phoneListId, List<PhoneDocument> phones) {
 		this.id = id;
 		this.email = email;
@@ -36,7 +38,6 @@ public class CustomerContactDocument {
 		this.id = id;
 	}
 
-	
 	public int getAddressListId() {
 		return addressListId;
 	}
@@ -96,32 +97,57 @@ public class CustomerContactDocument {
 
 	@Override
 	public String toString() {
-		return "CustomerContactDocument [id=" + id + ", email=" + email + ", addresses=" + addresses + ", phones="
-				+ phones + "]";
+		return "CustomerContactDocument [id=" + id + ", email=" + email + ", addressListId=" + addressListId
+				+ ", addresses=" + addresses + ", phoneListId=" + phoneListId + ", phones=" + phones + "]";
 	}
 
 	public static CustomerContactDocument fromCustomer(CustomerContact customerContact) {
 		var customerDocumentContact = new CustomerContactDocument();
 		customerDocumentContact.setId(customerContact.getIdentity().id());
 		customerDocumentContact.setEmail(customerContact.getEmail().value());
-		ArrayList<AddressDocument> addresses = customerContact.getAddressList().getAddresses().stream().map(addr -> {
-			return new AddressDocument(addr.country().value(), addr.city().value(), addr.defaultAddress(),
-					addr.lines().values());
-		}).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+		customerDocumentContact.setAddressListId(customerContact.getAddressList().getIdentity().id());
+		customerDocumentContact.setPhoneListId(customerContact.getPhoneList().getIdentity().id());
+
+		var addresses = customerContact.getAddressList().getAddresses().stream()
+				.map(address -> new AddressDocument(
+						address.country().value(),
+						address.city().value(),
+						address.defaultAddress(),
+						address.lines().values()))
+				.toList();
 		customerDocumentContact.setAddresses(addresses);
-		ArrayList<PhoneDocument> phones = new ArrayList<PhoneDocument>(
-				customerContact.getPhoneList().getPhones().stream().map(phone -> {
-					return new PhoneDocument(phone.value(), phone.defaultPhone());
-				}).collect(ArrayList::new, ArrayList::add, ArrayList::addAll));
+
+		var phones = customerContact.getPhoneList().getPhones().stream()
+				.map(phone -> new PhoneDocument(phone.value(), phone.defaultPhone()))
+				.toList();
 		customerDocumentContact.setPhones(phones);
+
 		return customerDocumentContact;
 	}
 
 	public static CustomerContact toCustomerContact(CustomerContactDocument customerContactDocument) {
+		var addressDocuments = Objects.requireNonNullElse(customerContactDocument.getAddresses(), List.<AddressDocument>of());
+		var addresses = addressDocuments.stream()
+				.map(addressDocument -> Address.valueOf(
+						addressDocument.getCountry(),
+						addressDocument.getCity(),
+						addressDocument.isPrimaryAddress(),
+						Objects.requireNonNullElse(addressDocument.getLines(), List.<String>of()).toArray(String[]::new)))
+				.toArray(Address[]::new);
+
+		var phoneDocuments = Objects.requireNonNullElse(customerContactDocument.getPhones(), List.<PhoneDocument>of());
+		var phones = phoneDocuments.stream()
+				.map(phoneDocument -> new Phone(phoneDocument.getPhone(), phoneDocument.isPrimaryPhone()))
+				.toArray(Phone[]::new);
+
 		return new CustomerContact.Builder(customerContactDocument.getId())
-				                  .email(customerContactDocument.getEmail())
-				                  .addresses(new AddressList.Builder(customerContactDocument.getAddressListId())
-				                		                        .build())
-				                  .build();
+				.email(customerContactDocument.getEmail())
+				.addresses(new AddressList.Builder(customerContactDocument.getAddressListId())
+						.addresses(addresses)
+						.build())
+				.phones(new PhoneList.Builder(customerContactDocument.getPhoneListId())
+						.phones(phones)
+						.build())
+				.build();
 	}
 }

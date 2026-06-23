@@ -1,5 +1,7 @@
 package com.example.cm.dto.request;
 
+import com.example.cm.dto.CustomerContactDto;
+import com.example.cm.dto.CustomerProfileDto;
 import com.example.hexagonal.helper.DataTransferObject;
 import com.example.hexagonal.helper.Direction;
 
@@ -7,6 +9,7 @@ import com.example.hexagonal.helper.Direction;
 public record RegisterCustomerRequest(
 		String customerId,
 		String firstName,
-		String lastName) {
-
+		String lastName,
+		CustomerProfileDto profile,
+		CustomerContactDto contact) {
 }

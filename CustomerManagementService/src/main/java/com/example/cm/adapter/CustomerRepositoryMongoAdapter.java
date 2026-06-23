@@ -1,5 +1,6 @@
 package com.example.cm.adapter;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.cm.document.CustomerContactDocument;
 import com.example.cm.document.CustomerDocument;
+import com.example.cm.document.CustomerProfileDocument;
 import com.example.cm.domain.Customer;
 import com.example.cm.domain.CustomerID;
 import com.example.cm.repository.CustomerDocumentRepository;
@@ -25,39 +27,40 @@ public class CustomerRepositoryMongoAdapter implements CustomerRepository {
 	@Override
 	@Transactional
 	public Customer persist(Customer customer) {
-		CustomerDocument  customerDocument = mapCustomerToDocument(customer);
-		customerDocument = customerDocumentRepository.save(customerDocument );
-		return mapDocumentToCustomer(customerDocument);
+		var customerDocument = mapCustomerToDocument(customer);
+		var savedCustomerDocument = customerDocumentRepository.save(customerDocument);
+		return mapDocumentToCustomer(savedCustomerDocument);
 	}
 
 	@Override
 	public Optional<Customer> findCustomerById(CustomerID customerId) {
-		return customerDocumentRepository.findById(customerId.getValue()).map(CustomerDocument::toCustomer);
+		Objects.requireNonNull(customerId, "customerId cannot be null");
+		return customerDocumentRepository.findById(customerId.getValue()).map(this::mapDocumentToCustomer);
 	}
 
 	@Transactional
 	@Override
 	public Customer updateCustomer(Customer customer) {
-		CustomerDocument  customerDocument = mapCustomerToDocument(customer);		
+		var customerDocument = mapCustomerToDocument(customer);
 		var updatedCustomerDocument = customerDocumentRepository.save(customerDocument);
 		return mapDocumentToCustomer(updatedCustomerDocument);
 	}
-	
+
 	private CustomerDocument mapCustomerToDocument(Customer customer) {
+		Objects.requireNonNull(customer, "customer cannot be null");
+
 		var customerDocument = new CustomerDocument();
 		customerDocument.setCustomerId(customer.getIdentity().getValue());
-		var customerContact = customer.getCustomerContact();
-		customerDocument.setCustomerContact(CustomerContactDocument.fromCustomer(customerContact));
 		customerDocument.setFirstName(customer.getFullName().firstName());
 		customerDocument.setLastName(customer.getFullName().lastName());
 		customerDocument.setVerified(customer.getVerified());
+		customerDocument.setCustomerProfile(CustomerProfileDocument.fromCustomerProfile(customer.getCustomerProfile()));
+		customerDocument.setCustomerContact(CustomerContactDocument.fromCustomer(customer.getCustomerContact()));
 		return customerDocument;
 	}
-	
+
 	private Customer mapDocumentToCustomer(CustomerDocument customerDocument) {
-		return new Customer.Builder()
-				            .customerId(customerDocument.getCustomerId())
-				            .fullName(customerDocument.getFirstName(), customerDocument.getLastName())
-				            .build();
+		Objects.requireNonNull(customerDocument, "customerDocument cannot be null");
+		return customerDocument.toCustomer();
 	}
 }

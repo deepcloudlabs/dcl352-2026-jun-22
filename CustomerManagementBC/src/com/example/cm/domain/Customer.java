@@ -64,7 +64,7 @@ public class Customer extends DomainEntity<CustomerID> {
 	}
 
 	public CustomerID customerId() {
-		return this.customerId();
+		return this.getIdentity();
 	}
 
 	public FullName fullName() {
@@ -171,7 +171,7 @@ public class Customer extends DomainEntity<CustomerID> {
 
 		private CustomerID customerId;
 		private FullName fullName;
-		private CustomerVerified verified;
+		private CustomerVerified verified = CustomerVerified.UNVERIFIED;
 		private CustomerProfile customerProfile;
 		private CustomerContact customerContact;
 
@@ -193,6 +193,11 @@ public class Customer extends DomainEntity<CustomerID> {
 
 		public Builder contact(CustomerContact customerContact) {
 			this.customerContact = Objects.requireNonNull(customerContact, "customerContact cannot be null");
+			return this;
+		}
+
+		public Builder verified(CustomerVerified verified) {
+			this.verified = Objects.requireNonNull(verified, "verified cannot be null");
 			return this;
 		}
 

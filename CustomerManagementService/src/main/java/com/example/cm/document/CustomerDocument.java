@@ -85,7 +85,13 @@ public class CustomerDocument {
 	}
 
 	public Customer toCustomer() {
-		return new Customer.Builder().customerId(this.customerId).fullName(firstName, lastName).build();
+		return new Customer.Builder()
+				.customerId(this.customerId)
+				.fullName(firstName, lastName)
+				.verified(this.verified)
+				.profile(CustomerProfileDocument.toCustomerProfile(this.customerProfile))
+				.contact(CustomerContactDocument.toCustomerContact(this.customerContact))
+				.build();
 	}
 
 	@Override

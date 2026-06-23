@@ -29,8 +29,23 @@ public class PhoneList extends DomainEntity<PhoneListID> {
 	}
 
 	public Phone setDefaultPhone(Phone defaultPhone) {
-		// TODO: set default phone to defaultPhone
-		return null;
+		var updatedPhones = new ArrayList<Phone>();
+		var found = false;
+
+		for (var phone : this.phones) {
+			if (phone.value().equals(defaultPhone.value())) {
+				updatedPhones.add(new Phone(phone.value(), true));
+				found = true;
+			} else {
+				updatedPhones.add(new Phone(phone.value(), false));
+			}
+		}
+
+		if (!found)
+			throw new BusinessRule(29, "Default phone should be one of the customer's phones");
+
+		this.phones = updatedPhones;
+		return getDefaultPhone();
 	}
 
 	public Phone getDefaultPhone() {
@@ -62,6 +77,15 @@ public class PhoneList extends DomainEntity<PhoneListID> {
 			for (var phone : phonesReceived) {
 				// TODO: validation
 				phones.add(new Phone(phone, false));
+			}
+			return this;
+		}
+
+		public Builder phones(Phone... phonesReceived) {
+			this.phones = new ArrayList<>();
+			for (var phone : phonesReceived) {
+				// TODO: validation
+				phones.add(phone);
 			}
 			return this;
 		}

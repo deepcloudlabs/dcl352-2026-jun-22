@@ -5,6 +5,8 @@ import java.util.Objects;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.example.cm.domain.CustomerCategory;
+import com.example.cm.domain.CustomerProfile;
+import com.example.cm.domain.ProfileID;
 
 public class CustomerProfileDocument {
 	@Field("profile_id")
@@ -37,6 +39,32 @@ public class CustomerProfileDocument {
 
 	public void setCustomerCategory(CustomerCategory customerCategory) {
 		this.customerCategory = customerCategory;
+	}
+
+	public static CustomerProfileDocument fromCustomerProfile(CustomerProfile customerProfile) {
+		var profileDocument = new CustomerProfileDocument();
+		profileDocument.setProfileId(customerProfile.getIdentity().id());
+
+		var birthDate = new BirthDateDocument();
+		birthDate.setDay(customerProfile.getBirthDate().day());
+		birthDate.setMonth(customerProfile.getBirthDate().month());
+		birthDate.setYear(customerProfile.getBirthDate().year());
+		profileDocument.setBirthDate(birthDate);
+
+		profileDocument.setCustomerCategory(customerProfile.getCustomerCategory());
+		return profileDocument;
+	}
+
+	public static CustomerProfile toCustomerProfile(CustomerProfileDocument customerProfileDocument) {
+		Objects.requireNonNull(customerProfileDocument, "customerProfileDocument cannot be null");
+		Objects.requireNonNull(customerProfileDocument.getBirthDate(), "birthDate cannot be null");
+		Objects.requireNonNull(customerProfileDocument.getCustomerCategory(), "customerCategory cannot be null");
+
+		var birthDate = customerProfileDocument.getBirthDate();
+		return new CustomerProfile.Builder(new ProfileID(customerProfileDocument.getProfileId()))
+				.birthDate(birthDate.getDay(), birthDate.getMonth(), birthDate.getYear())
+				.customerCategory(customerProfileDocument.getCustomerCategory().name())
+				.build();
 	}
 
 	@Override
