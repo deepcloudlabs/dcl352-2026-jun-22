@@ -8,12 +8,12 @@ import com.example.ddd.helper.Entity;
 // Customer, CustomerID, FullName, BirthYear, Email, AddressList, PhoneList,... 
 // Entity: 1) persistence ii) identity
 @Entity(identity="customerId", aggregate = true)
-public class Customer {
-	private CustomerID customerId;
+public class Customer extends DomainEntity<CustomerID> {
 	private FullName fullName;
-	private BirthYear birthYear;
-	private Email email;
-	private AddressList addresses;
-	private PhoneList phones;
 	private CustomerVerified verified;
+	private CustomerProfile customerProfile;
+	private CustomerContact customerContact;
+
+	
+
 }
