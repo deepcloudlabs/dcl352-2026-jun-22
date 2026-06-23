@@ -1,6 +1,5 @@
 package com.example.cm.domain;
 
-import java.time.Clock;
 import java.time.Instant;
 import java.util.Objects;
 
@@ -26,6 +25,38 @@ public class Customer extends DomainEntity<CustomerID> {
 		this.customerContact = Objects.requireNonNull(builder.customerContact, "customerContact cannot be null");
 		this.verified = builder.verified;
 		enforceInvariants();
+	}
+
+	public FullName getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(FullName fullName) {
+		this.fullName = fullName;
+	}
+
+	public CustomerVerified getVerified() {
+		return verified;
+	}
+
+	public void setVerified(CustomerVerified verified) {
+		this.verified = verified;
+	}
+
+	public CustomerProfile getCustomerProfile() {
+		return customerProfile;
+	}
+
+	public void setCustomerProfile(CustomerProfile customerProfile) {
+		this.customerProfile = customerProfile;
+	}
+
+	public CustomerContact getCustomerContact() {
+		return customerContact;
+	}
+
+	public void setCustomerContact(CustomerContact customerContact) {
+		this.customerContact = customerContact;
 	}
 
 	public static Builder builder() {
@@ -116,15 +147,15 @@ public class Customer extends DomainEntity<CustomerID> {
 
 	private void enforceInvariants() {
 		if (id == null) {
-			throw new DomainInvariantViolation(30,"Customer identity is required.");
+			throw new DomainInvariantViolation(30, "Customer identity is required.");
 		}
 
 		if (fullName == null) {
-			throw new DomainInvariantViolation(40,"Customer full name is required.");
+			throw new DomainInvariantViolation(40, "Customer full name is required.");
 		}
 
 		if (customerProfile == null) {
-			throw new DomainInvariantViolation(50,"Customer profile is required.");
+			throw new DomainInvariantViolation(50, "Customer profile is required.");
 		}
 
 		if (customerContact == null) {
@@ -132,11 +163,11 @@ public class Customer extends DomainEntity<CustomerID> {
 		}
 
 		if (verified == null) {
-			throw new DomainInvariantViolation(70,"Customer verification status is required.");
+			throw new DomainInvariantViolation(70, "Customer verification status is required.");
 		}
 
 		if (verified == CustomerVerified.UNVERIFIED && !customerContact.hasEmail()) {
-			throw new DomainInvariantViolation(80,"Verified customer must have an email.");
+			throw new DomainInvariantViolation(80, "Verified customer must have an email.");
 		}
 	}
 
@@ -157,7 +188,7 @@ public class Customer extends DomainEntity<CustomerID> {
 		}
 
 		public Builder fullName(String firstName, String lastName) {
-			this.fullName = new FullName(firstName,lastName);
+			this.fullName = new FullName(firstName, lastName);
 			return this;
 		}
 
@@ -165,7 +196,6 @@ public class Customer extends DomainEntity<CustomerID> {
 			this.customerProfile = Objects.requireNonNull(customerProfile, "customerProfile cannot be null");
 			return this;
 		}
-
 
 		public Builder contact(CustomerContact customerContact) {
 			this.customerContact = Objects.requireNonNull(customerContact, "customerContact cannot be null");
@@ -175,5 +205,13 @@ public class Customer extends DomainEntity<CustomerID> {
 		public Customer build() {
 			return new Customer(this);
 		}
+	}
+
+	public Phone getPrimaryPhone() {
+		for (var phone : customerContact.getPhoneList().getPhones()) {
+			if (phone.defaultPhone())
+				return phone;
+		}
+		throw new IllegalStateException("Customer should have exactly one primary phone");
 	}
 }

@@ -1,17 +1,17 @@
 package com.example.ddd.helper;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.CLASS;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 @Documented
-@Retention(CLASS)
+@Retention(RUNTIME)
 @Target(TYPE)
-public @interface Identity {
-
-	Class<?> entity();
-
+@Inherited
+public @interface DomainEvent {
+	String boundedContext() default "";
 }

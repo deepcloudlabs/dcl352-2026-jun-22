@@ -3,7 +3,6 @@ package com.example.cm.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.cm.domain.AddressList.Builder;
 import com.example.cm.domain.exception.BusinessConstraint;
 import com.example.cm.domain.exception.BusinessRule;
 import com.example.ddd.helper.Entity;
